@@ -52,8 +52,8 @@ const WebsiteScanner = () => {
         setScannedImages(prev => prev.map(item => item.id === id ? { ...item, status: 'processing', error: null } : item));
 
         try {
-            const altText = await generateAltFromUrl(img.preview);
-            setScannedImages(prev => prev.map(item => item.id === id ? { ...item, altText, status: 'done' } : item));
+            const { altText, modelUsed } = await generateAltFromUrl(img.preview);
+            setScannedImages(prev => prev.map(item => item.id === id ? { ...item, altText, modelUsed, status: 'done' } : item));
         } catch (err) {
             setScannedImages(prev => prev.map(item => item.id === id ? { ...item, status: 'error', error: err.message } : item));
         }

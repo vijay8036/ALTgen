@@ -93,9 +93,16 @@ const AltResultCard = ({ image, altText, onUpdate, onGenerate }) => {
                 )}
 
                 <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                    <span className={`text-xs font-mono ${altText?.length > 125 ? 'text-red-400' : 'text-gray-500'}`}>
-                        {altText?.length || 0} / 125 chars
-                    </span>
+                    <div className="flex items-center gap-3">
+                        <span className={`text-xs font-mono transition-colors ${altText?.length > 125 ? 'text-red-400' : 'text-gray-500'}`}>
+                            {altText?.length || 0} / 125 chars
+                        </span>
+                        {image.modelUsed && (
+                            <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-candy-btn-end/10 text-candy-btn-end border border-candy-btn-end/20">
+                                {image.modelUsed}
+                            </span>
+                        )}
+                    </div>
 
                     <button
                         onClick={handleCopy}

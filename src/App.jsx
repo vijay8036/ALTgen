@@ -28,8 +28,8 @@ function App() {
   const processImage = async (img) => {
     try {
       setImages(prev => prev.map(item => item.id === img.id ? { ...item, status: 'processing', error: null } : item));
-      const generatedAlt = await generateAltText(img.file);
-      setImages(prev => prev.map(item => item.id === img.id ? { ...item, altText: generatedAlt, status: 'done' } : item));
+      const { altText, modelUsed } = await generateAltText(img.file);
+      setImages(prev => prev.map(item => item.id === img.id ? { ...item, altText, modelUsed, status: 'done' } : item));
     } catch (err) {
       setImages(prev => prev.map(item => item.id === img.id ? { ...item, status: 'error', error: err.message } : item));
     }

@@ -17,7 +17,7 @@ export const generateAltText = async (file) => {
         }
 
         const data = await response.json();
-        return data.altText;
+        return { altText: data.altText, modelUsed: data.modelUsed };
     } catch (error) {
         console.error("API Error:", error);
         throw new Error(error.message || "Failed to generate ALT text.");

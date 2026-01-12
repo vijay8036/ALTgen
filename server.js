@@ -160,9 +160,9 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
         const prompt = "Generate a single, concise, ADA-compliant ALT text for this image. strictly under 125 characters. Describe the main subject and action. Do not start with 'Image of' or 'Picture of'.";
 
         // Use the unified fallback function
-        const text = await generateWithFallback(prompt, imagePart);
+        const result = await generateWithFallback(prompt, imagePart);
 
-        res.json({ altText: text.trim() });
+        res.json({ altText: result.text.trim(), modelUsed: result.modelUsed });
 
     } catch (error) {
         console.error("URL Generation error:", error.message);
@@ -184,19 +184,21 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
 const generateWithFallback = async (prompt, imagePart) => {
     try {
         // Try with primary model
+        const modelName = "Gemini 3 Flash Preview";
         const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
         const result = await model.generateContent([prompt, imagePart]);
         const response = await result.response;
-        return response.text();
+        return { text: response.text(), modelUsed: modelName };
     } catch (error) {
         // If rate limited or not found, try fallback model
         if (error.message.includes('429') || error.message.includes('QuotaExceeded') || error.message.includes('404')) {
             console.log("Primary model failed, switching to fallback Gemini model (gemini-2.0-flash)...");
             try {
+                const modelName = "Gemini 2.0 Flash";
                 const fallbackModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
                 const result = await fallbackModel.generateContent([prompt, imagePart]);
                 const response = await result.response;
-                return response.text();
+                return { text: response.text(), modelUsed: modelName };
             } catch (fallbackError) {
                 console.error("Gemini fallback failed:", fallbackError.message);
 
@@ -217,7 +219,7 @@ const generateWithFallback = async (prompt, imagePart) => {
                             ],
                             max_tokens: 150,
                         });
-                        return response.choices[0].message.content;
+                        return { text: response.choices[0].message.content, modelUsed: "GPT-4o Mini" };
                     } catch (openaiError) {
                         console.error("OpenAI fallback failed:", openaiError.message);
                         throw openaiError; // Throw if ALL fail
@@ -250,8 +252,8 @@ app.post('/api/generate-alt', upload.single('image'), async (req, res) => {
 
         const prompt = "Generate a single, concise, ADA-compliant ALT text for this image. strictly under 125 characters. Describe the main subject and action. Do not start with 'Image of' or 'Picture of'.";
 
-        const text = await generateWithFallback(prompt, imagePart);
-        res.json({ altText: text.trim() });
+        const result = await generateWithFallback(prompt, imagePart);
+        res.json({ altText: result.text.trim(), modelUsed: result.modelUsed });
 
     } catch (error) {
         console.error("Server processing error:", error.message);

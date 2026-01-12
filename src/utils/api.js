@@ -25,5 +25,5 @@ export const generateAltFromUrl = async (imageUrl) => {
     }
 
     const data = await response.json();
-    return data.altText;
+    return { altText: data.altText, modelUsed: data.modelUsed };
 };
