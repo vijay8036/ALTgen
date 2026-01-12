@@ -8,6 +8,7 @@ import fs from 'fs';
 import https from 'https';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -26,15 +27,77 @@ app.use(express.json());
 // Configure Multer for memory storage (we just pass the buffer to Gemini)
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY;
-if (!apiKey) throw new Error("GEMINI_API_KEY is not set in .env file");
-const genAI = new GoogleGenerativeAI(apiKey);
+// Helper to get Gemini Instance safely
+// This avoids top-level throws that would crash Vercel initialization if env vars are missing
+const getGenAI = () => {
+    const key = process.env.GEMINI_API_KEY;
+    if (!key) throw new Error("GEMINI_API_KEY is not set in environment variables.");
+    return new GoogleGenerativeAI(key);
+};
 
 // Initialize OpenAI (Optional but recommended for fallback)
 const openaiApiKey = process.env.OPENAI_API_KEY;
 const openai = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey }) : null;
-if (!openai) console.warn("OPENAI_API_KEY not found. OpenAI fallback will be disabled.");
+if (!openai && process.env.NODE_ENV !== 'production') console.warn("OPENAI_API_KEY not found. OpenAI fallback will be disabled.");
+
+// Helper to try generation with fallback
+const generateWithFallback = async (prompt, imagePart) => {
+    try {
+        const genAI = getGenAI();
+        const modelName = "Gemini 3 Flash Preview";
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        const result = await model.generateContent([prompt, imagePart]);
+        const response = await result.response;
+        return { text: response.text(), modelUsed: modelName };
+    } catch (error) {
+        // Propagate missing key error explicitly
+        if (error.message.includes('GEMINI_API_KEY')) {
+            throw error;
+        }
+
+        const genAI = getGenAI();
+
+        // If rate limited or not found, try fallback model
+        if (error.message.includes('429') || error.message.includes('QuotaExceeded') || error.message.includes('404')) {
+            console.log("Primary model failed, switching to fallback Gemini model (gemini-2.0-flash)...");
+            try {
+                const modelName = "Gemini 2.0 Flash";
+                const fallbackModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+                const result = await fallbackModel.generateContent([prompt, imagePart]);
+                const response = await result.response;
+                return { text: response.text(), modelUsed: modelName };
+            } catch (fallbackError) {
+                console.error("Gemini fallback failed:", fallbackError.message);
+
+                // Final Fallback: OpenAI
+                if (openai) {
+                    console.log("Switching to OpenAI (gpt-4o-mini)...");
+                    try {
+                        const response = await openai.chat.completions.create({
+                            model: "gpt-4o-mini",
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: [
+                                        { type: "text", text: prompt },
+                                        { type: "image_url", image_url: { url: `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}` } }
+                                    ],
+                                },
+                            ],
+                            max_tokens: 150,
+                        });
+                        return { text: response.choices[0].message.content, modelUsed: "GPT-4o Mini" };
+                    } catch (openaiError) {
+                        console.error("OpenAI fallback failed:", openaiError.message);
+                        throw openaiError; // Throw if ALL fail
+                    }
+                }
+                throw fallbackError;
+            }
+        }
+        throw error;
+    }
+};
 
 /**
  * Endpoint: POST /api/scan-url
@@ -79,7 +142,6 @@ app.post('/api/scan-url', async (req, res) => {
                 } else if (!src.startsWith('http')) {
                     // Try to resolve relative path
                     const parsedUrl = new URL(url);
-                    // Simple join - strictly could be better with path.resolve logic but URL does a good job
                     try {
                         src = new URL(src, url).href;
                     } catch (e) {
@@ -88,8 +150,6 @@ app.post('/api/scan-url', async (req, res) => {
                 }
 
                 // Strict filtering for supported AI formats
-                // Gemini/OpenAI typically support: PNG, JPEG, WEBP, HEIC, HEIF
-                // We exclude SVG, ICO, BMP, TIFF to avoid errors
                 if (/\.(svg|ico|bmp|tiff|tif)($|\?)/i.test(src)) {
                     return;
                 }
@@ -133,7 +193,7 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
                 'Sec-Fetch-Dest': 'image',
                 'Sec-Fetch-Mode': 'no-cors',
                 'Sec-Fetch-Site': 'cross-site',
-                'Referer': imageUrl // Or the original site URL if we had it, but image URL is often safer self-ref
+                'Referer': imageUrl
             },
             httpsAgent: httpsAgent,
             timeout: 15000
@@ -143,7 +203,6 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
 
         // Validate MIME type before sending to AI
         const supportedMimes = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif'];
-        // Note: checking startsWith('image/') is too broad as it includes svg
         if (!supportedMimes.some(type => mimeType.toLowerCase().includes(type.split('/')[1]))) {
             return res.status(400).json({
                 error: `Unsupported image format (${mimeType}). AI models only support PNG, JPEG, and WEBP.`
@@ -167,7 +226,6 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
     } catch (error) {
         console.error("URL Generation error:", error.message);
 
-        // Handle Gemini Rate Limits (if even fallback fails)
         if (error.message.includes('429') || error.message.includes('QuotaExceeded')) {
             return res.status(429).json({
                 error: 'AI Usage Limit Exceeded on all models. Please wait a minute before trying again.'
@@ -179,58 +237,6 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
         res.status(status).json({ error: 'Failed to generate for URL. ' + msg });
     }
 });
-
-// Helper to try generation with fallback
-const generateWithFallback = async (prompt, imagePart) => {
-    try {
-        // Try with primary model
-        const modelName = "Gemini 3 Flash Preview";
-        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
-        const result = await model.generateContent([prompt, imagePart]);
-        const response = await result.response;
-        return { text: response.text(), modelUsed: modelName };
-    } catch (error) {
-        // If rate limited or not found, try fallback model
-        if (error.message.includes('429') || error.message.includes('QuotaExceeded') || error.message.includes('404')) {
-            console.log("Primary model failed, switching to fallback Gemini model (gemini-2.0-flash)...");
-            try {
-                const modelName = "Gemini 2.0 Flash";
-                const fallbackModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-                const result = await fallbackModel.generateContent([prompt, imagePart]);
-                const response = await result.response;
-                return { text: response.text(), modelUsed: modelName };
-            } catch (fallbackError) {
-                console.error("Gemini fallback failed:", fallbackError.message);
-
-                // Final Fallback: OpenAI
-                if (openai) {
-                    console.log("Switching to OpenAI (gpt-4o-mini)...");
-                    try {
-                        const response = await openai.chat.completions.create({
-                            model: "gpt-4o-mini",
-                            messages: [
-                                {
-                                    role: "user",
-                                    content: [
-                                        { type: "text", text: prompt },
-                                        { type: "image_url", image_url: { url: `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}` } }
-                                    ],
-                                },
-                            ],
-                            max_tokens: 150,
-                        });
-                        return { text: response.choices[0].message.content, modelUsed: "GPT-4o Mini" };
-                    } catch (openaiError) {
-                        console.error("OpenAI fallback failed:", openaiError.message);
-                        throw openaiError; // Throw if ALL fail
-                    }
-                }
-                throw fallbackError;
-            }
-        }
-        throw error;
-    }
-};
 
 /**
  * Endpoint: POST /api/generate-alt
@@ -258,7 +264,6 @@ app.post('/api/generate-alt', upload.single('image'), async (req, res) => {
     } catch (error) {
         console.error("Server processing error:", error.message);
 
-        // Handle Gemini Rate Limits (if even fallback fails)
         if (error.message.includes('429') || error.message.includes('QuotaExceeded')) {
             return res.status(429).json({
                 error: 'AI Usage Limit Exceeded on all models. Please wait a minute before trying again.'
@@ -273,7 +278,8 @@ app.post('/api/generate-alt', upload.single('image'), async (req, res) => {
 export default app;
 
 // Only listen if running locally
-if (process.env.NODE_ENV !== 'production' || process.argv[1] === new URL(import.meta.url).pathname) {
+// Safe check that works on all platforms (Mac/Windows/Linux)
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
     app.listen(port, () => {
         console.log(`Backend server running at http://localhost:${port}`);
     });
