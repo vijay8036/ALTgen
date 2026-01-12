@@ -6,7 +6,7 @@ export const generateAltText = async (file) => {
     formData.append('image', file);
 
     try {
-        const response = await fetch('http://localhost:3000/api/generate-alt', {
+        const response = await fetch('/api/generate-alt', {
             method: 'POST',
             body: formData,
         });

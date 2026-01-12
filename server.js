@@ -269,6 +269,12 @@ app.post('/api/generate-alt', upload.single('image'), async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Backend server running at http://localhost:${port}`);
-});
+// Export the app for Vercel
+export default app;
+
+// Only listen if running locally
+if (process.env.NODE_ENV !== 'production' || process.argv[1] === new URL(import.meta.url).pathname) {
+    app.listen(port, () => {
+        console.log(`Backend server running at http://localhost:${port}`);
+    });
+}

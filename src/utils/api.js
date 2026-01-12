@@ -1,5 +1,5 @@
 export const scanWebsite = async (url) => {
-    const response = await fetch('http://localhost:3000/api/scan-url', {
+    const response = await fetch('/api/scan-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url })
@@ -13,7 +13,7 @@ export const scanWebsite = async (url) => {
 };
 
 export const generateAltFromUrl = async (imageUrl) => {
-    const response = await fetch('http://localhost:3000/api/generate-alt-from-url', {
+    const response = await fetch('/api/generate-alt-from-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageUrl })
