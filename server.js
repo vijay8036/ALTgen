@@ -216,22 +216,27 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
             },
         };
 
-        const prompt = `Analyze the provided image and generate ONE clear, human-readable, ADA-compliant ALT text.
-                        Rules:
+        const prompt = `Analyze the provided image and generate ONE clear, concise, ADA-compliant ALT text.
+
+                        If the image is associated with a WEBSITE, WEB PAGE, or APP SCREENSHOT:
+                        - First analyze the website context using available metadata (page title, meta description, visible headings, or URL context).
+                        - Use the meta description and page purpose to guide the ALT text.
+                        - Combine the website purpose + visible UI elements into a single, meaningful ALT description.
+                        - Do NOT copy meta text verbatim; rewrite it naturally based on what is visually shown.
+
+                        General Rules:
                         - Maximum length: 125 characters (strict).
-                        - Describe only what is visually present (main subject + action).
-                        - Use simple, natural language that is easy to read.
+                        - Describe only what is visually present and its purpose.
+                        - Use simple, human-readable language.
+                        - Focus on the main subject and primary action or function.
                         - Do NOT start with: "image of", "picture of", "photo of", or similar phrases.
                         - Avoid keyword stuffing, repetition, or assumptions.
-                        - If the image represents a WEBSITE, WEB PAGE, or APP SCREEN:
-                        - Combine the visual elements with the website context in a single ALT text.
-                        - Clearly describe what the page shows and its purpose (e.g., dashboard, landing page, form).
-                        - If multiple elements exist, focus on the primary visual purpose.
-                        - Ensure the output is suitable for screen readers and follows ADA & HTML accessibility rules.
+                        - If multiple UI elements exist, describe the primary function only.
+                        - Ensure the ALT text is suitable for screen readers and follows ADA & HTML accessibility standards.
 
-                        Output:
+                        Output Rules:
                         - Return ONLY the final ALT text.
-                        - No quotes, no explanations, no extra text.`;
+                        - No quotes, no labels, no explanations.`;
 
         // Use the unified fallback function
         const result = await generateWithFallback(prompt, imagePart);
@@ -271,22 +276,27 @@ app.post('/api/generate-alt', upload.single('image'), async (req, res) => {
             },
         };
 
-        const prompt = `Analyze the provided image and generate ONE clear, human-readable, ADA-compliant ALT text.
-                        Rules:
+        const prompt = `Analyze the provided image and generate ONE clear, concise, ADA-compliant ALT text.
+
+                        If the image is associated with a WEBSITE, WEB PAGE, or APP SCREENSHOT:
+                        - First analyze the website context using available metadata (page title, meta description, visible headings, or URL context).
+                        - Use the meta description and page purpose to guide the ALT text.
+                        - Combine the website purpose + visible UI elements into a single, meaningful ALT description.
+                        - Do NOT copy meta text verbatim; rewrite it naturally based on what is visually shown.
+
+                        General Rules:
                         - Maximum length: 125 characters (strict).
-                        - Describe only what is visually present (main subject + action).
-                        - Use simple, natural language that is easy to read.
+                        - Describe only what is visually present and its purpose.
+                        - Use simple, human-readable language.
+                        - Focus on the main subject and primary action or function.
                         - Do NOT start with: "image of", "picture of", "photo of", or similar phrases.
                         - Avoid keyword stuffing, repetition, or assumptions.
-                        - If the image represents a WEBSITE, WEB PAGE, or APP SCREEN:
-                        - Combine the visual elements with the website context in a single ALT text.
-                        - Clearly describe what the page shows and its purpose (e.g., dashboard, landing page, form).
-                        - If multiple elements exist, focus on the primary visual purpose.
-                        - Ensure the output is suitable for screen readers and follows ADA & HTML accessibility rules.
+                        - If multiple UI elements exist, describe the primary function only.
+                        - Ensure the ALT text is suitable for screen readers and follows ADA & HTML accessibility standards.
 
-                        Output:
+                        Output Rules:
                         - Return ONLY the final ALT text.
-                        - No quotes, no explanations, no extra text.`;
+                        - No quotes, no labels, no explanations.`;
 
         const result = await generateWithFallback(prompt, imagePart);
         res.json({ altText: result.text.trim(), modelUsed: result.modelUsed });

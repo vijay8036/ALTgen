@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import ImageUploader from './components/ImageUploader';
-import LoadingScanner from './components/LoadingScanner';
 import AltResultCard from './components/AltResultCard';
 import WebsiteScanner from './components/WebsiteScanner';
 import { generateAltText } from './utils/gemini';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('upload');
+  const location = useLocation();
+  const activeTab = location.pathname === '/website' ? 'website' : 'upload';
 
   // -- Image Upload State --
   const [images, setImages] = useState([]);
@@ -60,7 +61,7 @@ function App() {
     <div className="min-h-screen bg-candy-dark text-gray-200 font-sans selection:bg-candy-btn-start selection:text-white flex overflow-hidden">
 
       {/* Sidebar Navigation */}
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar activeTab={activeTab} />
 
       {/* Main Content Area */}
       <main className="flex-1 h-screen overflow-y-auto w-full relative">
@@ -70,7 +71,6 @@ function App() {
 
         <div className="max-w-5xl mx-auto p-4 md:p-12 relative z-10">
 
-          {/* Conditional Mobile Header or Common Header could go here */}
           <header className="mb-12 text-center md:text-left border-b border-white/5 pb-8">
             <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-tight">
               <span className="text-candy-light block">{activeTab === 'upload' ? 'Generate ALT for' : 'Extract images from'}</span>
@@ -85,64 +85,62 @@ function App() {
             </p>
           </header>
 
-          {/* TAB CONTENT: UPLOAD */}
-          {activeTab === 'upload' && (
-            <div className="space-y-10 animate-fade-in">
-              <div className="flex flex-col gap-4">
-                <ImageUploader onUpload={handleUpload} />
+          <Routes>
+            <Route path="/" element={<Navigate to="/upload" replace />} />
 
-                {images.length > 0 && (
-                  <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-2">
-                    <button
-                      onClick={handleClear}
-                      className="px-6 py-2 rounded-full border border-gray-600 text-gray-400 hover:text-white hover:border-white transition-all"
-                    >
-                      Clear All
-                    </button>
-                    <button
-                      onClick={handleGenerateAll}
-                      disabled={isGlobalProcessing}
-                      className="candy-btn"
-                    >
-                      {isGlobalProcessing ? 'Processing All...' : `✨ Generate All (${images.length})`}
-                    </button>
-                  </div>
-                )}
-              </div>
+            <Route path="/upload" element={
+              <div className="space-y-10 animate-fade-in">
+                <div className="flex flex-col gap-4">
+                  <ImageUploader onUpload={handleUpload} />
 
-              <div className="relative">
-                {isGlobalProcessing && (
-                  <div className="mb-8"><LoadingScanner /></div>
-                )}
-
-                {images.length > 0 && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-xl font-bold text-candy-green">Uploaded Images</h2>
+                  {images.length > 0 && (
+                    <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-2">
+                      <button
+                        onClick={handleClear}
+                        className="px-6 py-2 rounded-full border border-gray-600 text-gray-400 hover:text-white hover:border-white transition-all"
+                      >
+                        Clear All
+                      </button>
+                      <button
+                        onClick={handleGenerateAll}
+                        disabled={isGlobalProcessing}
+                        className="candy-btn"
+                      >
+                        {isGlobalProcessing ? 'Processing All...' : `✨ Generate All (${images.length})`}
+                      </button>
                     </div>
-                    <div className="grid gap-6">
-                      {images.map(img => (
-                        <AltResultCard
-                          key={img.id}
-                          image={img}
-                          altText={img.altText}
-                          onUpdate={handleUpdateAlt}
-                          onGenerate={handleGenerateSingle}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+                  )}
+                </div>
 
-          {/* TAB CONTENT: WEBSITE */}
-          {activeTab === 'website' && (
-            <div className="animate-fade-in">
-              <WebsiteScanner />
-            </div>
-          )}
+                <div className="relative">
+                  {images.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-xl font-bold text-candy-green">Uploaded Images</h2>
+                      </div>
+                      <div className="grid gap-6">
+                        {images.map(img => (
+                          <AltResultCard
+                            key={img.id}
+                            image={img}
+                            altText={img.altText}
+                            onUpdate={handleUpdateAlt}
+                            onGenerate={handleGenerateSingle}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            } />
+
+            <Route path="/website" element={
+              <div className="animate-fade-in">
+                <WebsiteScanner />
+              </div>
+            } />
+          </Routes>
 
           <footer className="mt-20 text-center text-gray-600 text-sm pb-8">
             <p>Powered by Google Gemini • React • Tailwind</p>

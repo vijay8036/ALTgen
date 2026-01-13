@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AltResultCard from './AltResultCard';
 import { scanWebsite, generateAltFromUrl } from '../utils/api';
+import FullScreenScanningLoader from './FullScreenScanningLoader';
 import { MdLanguage, MdSearch, MdRocketLaunch } from 'react-icons/md';
 
 const WebsiteScanner = () => {
@@ -22,7 +23,10 @@ const WebsiteScanner = () => {
         setScannedImages([]);
 
         try {
-            const data = await scanWebsite(processedUrl);
+            const [data] = await Promise.all([
+                scanWebsite(processedUrl),
+                new Promise(resolve => setTimeout(resolve, 5000)) // Force minimum 5s load time
+            ]);
 
             if (data.images && data.images.length > 0) {
                 const mappedImages = data.images.map(img => ({
@@ -65,6 +69,7 @@ const WebsiteScanner = () => {
 
     return (
         <div className="max-w-4xl mx-auto mt-10 space-y-8">
+            {isScanning && <FullScreenScanningLoader scannedUrl={url} />}
             <div className="candy-card p-8">
                 <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span className="text-3xl text-candy-btn-start"><MdLanguage /></span> Scan Website Images

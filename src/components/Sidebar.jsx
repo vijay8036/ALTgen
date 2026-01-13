@@ -1,10 +1,11 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { MdCloudUpload, MdWeb, MdSettings } from 'react-icons/md';
 
-const Sidebar = ({ activeTab, onTabChange }) => {
+const Sidebar = () => {
     const menuItems = [
-        { id: 'upload', icon: <MdCloudUpload className="text-2xl" />, label: 'Upload Image' },
-        { id: 'website', icon: <MdWeb className="text-2xl" />, label: 'Web Site' },
+        { path: '/upload', icon: <MdCloudUpload className="text-2xl" />, label: 'Upload Image' },
+        { path: '/website', icon: <MdWeb className="text-2xl" />, label: 'Web Site' },
     ];
 
     return (
@@ -17,21 +18,26 @@ const Sidebar = ({ activeTab, onTabChange }) => {
 
             <nav className="flex-1 p-4 space-y-2 mt-4">
                 {menuItems.map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => onTabChange(item.id)}
-                        className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 font-medium group ${activeTab === item.id
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) => `w-full flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 font-medium group ${isActive
                             ? 'bg-gradient-to-r from-candy-btn-start/20 to-candy-btn-end/20 text-white border border-white/10 shadow-lg'
                             : 'text-gray-400 hover:bg-white/5 hover:text-white'
                             }`}
                     >
-                        <span className={`transition-colors duration-300 ${activeTab === item.id ? 'text-candy-btn-start' : 'group-hover:text-white'}`}>
-                            {item.icon}
-                        </span>
-                        {item.label}
-                    </button>
+                        {({ isActive }) => (
+                            <>
+                                <span className={`transition-colors duration-300 ${isActive ? 'text-candy-btn-start' : 'group-hover:text-white'}`}>
+                                    {item.icon}
+                                </span>
+                                {item.label}
+                            </>
+                        )}
+                    </NavLink>
                 ))}
             </nav>
+
 
             <div className="p-6 border-t border-white/5 text-xs text-gray-500 font-mono">
                 v2.0 • n8n Theme
