@@ -11,9 +11,7 @@ const Sidebar = () => {
     return (
         <aside className="w-64 bg-candy-dark/95 backdrop-blur-xl border-r border-white/5 flex-shrink-0 hidden md:flex flex-col h-screen sticky top-0">
             <div className="p-8 border-b border-white/5">
-                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-candy-btn-start to-candy-btn-end tracking-tight">
-                    ALT Gen
-                </h2>
+                <img src="/assets/logo.svg" alt="ALT Gen Logo" className="h-10" />
             </div>
 
             <nav className="flex-1 p-4 space-y-2 mt-4">

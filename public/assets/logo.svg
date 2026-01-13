@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="683" height="221.568" viewBox="0 0 683 221.568">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.589" y1="-0.209" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff6d5a"/>
+      <stop offset="1" stop-color="#904bce"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_5" data-name="Group 5" transform="translate(-592 -268)">
+    <g id="Group_3" data-name="Group 3" transform="translate(0 0.284)">
+      <g id="Group_2" data-name="Group 2">
+        <g id="Group_1" data-name="Group 1">
+          <circle id="Ellipse_1" data-name="Ellipse 1" cx="38.5" cy="38.5" r="38.5" transform="translate(592 405)" fill="url(#linear-gradient)"/>
+          <rect id="Rectangle_1" data-name="Rectangle 1" width="210" height="77" rx="38.5" transform="matrix(-0.469, -0.883, 0.883, -0.469, 742.301, 489.284)" fill="url(#linear-gradient)"/>
+        </g>
+      </g>
+    </g>
+    <text id="ATL_Gen" data-name="ATL Gen" transform="translate(834 420)" fill="#fff" font-size="110" font-family="HelveticaNeue-Bold, Helvetica Neue" font-weight="700"><tspan x="0" y="0">ATL Gen</tspan></text>
+  </g>
+</svg>

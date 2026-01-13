@@ -14,10 +14,10 @@ const LandingPage = () => {
             </div>
 
             {/* Navigation */}
-            <nav className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-                <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-candy-btn-start to-candy-btn-end tracking-tight">
-                    ALT Gen
-                </div>
+            <nav className="max-w-7xl mx-auto px-8 py-8 flex justify-start items-center">
+                <Link to="/" className="flex items-center transition-opacity hover:opacity-80">
+                    <img src="/assets/logo.svg" alt="ALT Gen Logo" className="h-14" />
+                </Link>
             </nav>
 
             {/* Hero Section */}
