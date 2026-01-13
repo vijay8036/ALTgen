@@ -225,7 +225,7 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
                         - Do NOT copy meta text verbatim; rewrite it naturally based on what is visually shown.
 
                         General Rules:
-                        - Maximum length: 50 characters (strict).
+                        - Maximum length: 100 characters (strict).
                         - Describe only what is visually present and its purpose.
                         - Use simple, human-readable language.
                         - Focus on the main subject and primary action or function.
@@ -285,7 +285,7 @@ app.post('/api/generate-alt', upload.single('image'), async (req, res) => {
                         - Do NOT copy meta text verbatim; rewrite it naturally based on what is visually shown.
 
                         General Rules:
-                        - Maximum length: 50 characters (strict).
+                        - Maximum length: 100 characters (strict).
                         - Describe only what is visually present and its purpose.
                         - Use simple, human-readable language.
                         - Focus on the main subject and primary action or function.
