@@ -45,4 +45,73 @@
   .animate-scan {
     animation: scan 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
+
+  /* Floating animations for background orbs */
+  @keyframes float-slow {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(30px, -30px) scale(1.05);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.95);
+    }
+  }
+
+  @keyframes float-reverse {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(-40px, -40px) scale(1.1);
+    }
+  }
+
+  @keyframes float-diagonal {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(calc(-50% + 50px), calc(-50% - 50px)) scale(1.05);
+    }
+  }
+
+  @keyframes float-horizontal {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(60px);
+    }
+  }
+
+  @keyframes float-vertical {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-50px);
+    }
+  }
+
+  .animate-float-slow {
+    animation: float-slow 20s ease-in-out infinite;
+  }
+
+  .animate-float-reverse {
+    animation: float-reverse 15s ease-in-out infinite;
+  }
+
+  .animate-float-diagonal {
+    animation: float-diagonal 25s ease-in-out infinite;
+  }
+
+  .animate-float-horizontal {
+    animation: float-horizontal 18s ease-in-out infinite;
+  }
+
+  .animate-float-vertical {
+    animation: float-vertical 22s ease-in-out infinite;
+  }
 }

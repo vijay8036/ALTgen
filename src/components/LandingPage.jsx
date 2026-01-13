@@ -6,17 +6,28 @@ const LandingPage = () => {
     return (
         <div className="min-h-screen bg-candy-dark text-white font-sans overflow-x-hidden selection:bg-candy-btn-start selection:text-white">
 
-            {/* Background Glows */}
+            {/* Background Glows - Animated */}
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-candy-btn-start/20 rounded-full blur-[120px] animate-pulse"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-candy-btn-end/10 rounded-full blur-[120px]"></div>
-                <div className="absolute top-[40%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]"></div>
+                {/* Floating gradient orb 1 */}
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-candy-btn-start/20 rounded-full blur-[120px] animate-float-slow"></div>
+
+                {/* Floating gradient orb 2 */}
+                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-candy-btn-end/15 rounded-full blur-[120px] animate-float-reverse"></div>
+
+                {/* Floating gradient orb 3 */}
+                <div className="absolute top-[40%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px] animate-float-diagonal"></div>
+
+                {/* Additional moving orb 4 */}
+                <div className="absolute top-[20%] right-[20%] w-[400px] h-[400px] bg-pink-500/10 rounded-full blur-[100px] animate-float-horizontal"></div>
+
+                {/* Additional moving orb 5 */}
+                <div className="absolute bottom-[30%] left-[10%] w-[350px] h-[350px] bg-blue-500/10 rounded-full blur-[90px] animate-float-vertical"></div>
             </div>
 
             {/* Navigation */}
-            <nav className="max-w-7xl mx-auto px-8 py-8 flex justify-start items-center">
+            <nav className="max-w-7xl mx-auto px-8 py-6 flex justify-center items-center">
                 <Link to="/" className="flex items-center transition-opacity hover:opacity-80">
-                    <img src="/assets/logo.svg" alt="ALT Gen Logo" className="h-14" />
+                    <img src="/assets/logo.svg" alt="ALT Gen Logo" className="h-20" />
                 </Link>
             </nav>
 
