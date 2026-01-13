@@ -216,7 +216,22 @@ app.post('/api/generate-alt-from-url', async (req, res) => {
             },
         };
 
-        const prompt = "Generate a single, concise, ADA-compliant ALT text for this image. strictly under 125 characters. Describe the main subject and action. Do not start with 'Image of' or 'Picture of'.";
+        const prompt = `Analyze the provided image and generate ONE clear, human-readable, ADA-compliant ALT text.
+                        Rules:
+                        - Maximum length: 125 characters (strict).
+                        - Describe only what is visually present (main subject + action).
+                        - Use simple, natural language that is easy to read.
+                        - Do NOT start with: "image of", "picture of", "photo of", or similar phrases.
+                        - Avoid keyword stuffing, repetition, or assumptions.
+                        - If the image represents a WEBSITE, WEB PAGE, or APP SCREEN:
+                        - Combine the visual elements with the website context in a single ALT text.
+                        - Clearly describe what the page shows and its purpose (e.g., dashboard, landing page, form).
+                        - If multiple elements exist, focus on the primary visual purpose.
+                        - Ensure the output is suitable for screen readers and follows ADA & HTML accessibility rules.
+
+                        Output:
+                        - Return ONLY the final ALT text.
+                        - No quotes, no explanations, no extra text.`;
 
         // Use the unified fallback function
         const result = await generateWithFallback(prompt, imagePart);
@@ -256,7 +271,22 @@ app.post('/api/generate-alt', upload.single('image'), async (req, res) => {
             },
         };
 
-        const prompt = "Generate a single, concise, ADA-compliant ALT text for this image. strictly under 125 characters. Describe the main subject and action. Do not start with 'Image of' or 'Picture of'.";
+        const prompt = `Analyze the provided image and generate ONE clear, human-readable, ADA-compliant ALT text.
+                        Rules:
+                        - Maximum length: 125 characters (strict).
+                        - Describe only what is visually present (main subject + action).
+                        - Use simple, natural language that is easy to read.
+                        - Do NOT start with: "image of", "picture of", "photo of", or similar phrases.
+                        - Avoid keyword stuffing, repetition, or assumptions.
+                        - If the image represents a WEBSITE, WEB PAGE, or APP SCREEN:
+                        - Combine the visual elements with the website context in a single ALT text.
+                        - Clearly describe what the page shows and its purpose (e.g., dashboard, landing page, form).
+                        - If multiple elements exist, focus on the primary visual purpose.
+                        - Ensure the output is suitable for screen readers and follows ADA & HTML accessibility rules.
+
+                        Output:
+                        - Return ONLY the final ALT text.
+                        - No quotes, no explanations, no extra text.`;
 
         const result = await generateWithFallback(prompt, imagePart);
         res.json({ altText: result.text.trim(), modelUsed: result.modelUsed });
