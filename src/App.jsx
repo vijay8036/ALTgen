@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import ImageUploader from './components/ImageUploader';
 import AltResultCard from './components/AltResultCard';
 import WebsiteScanner from './components/WebsiteScanner';
+import LandingPage from './components/LandingPage';
 import { generateAltText } from './utils/gemini';
 
 function App() {
@@ -57,11 +58,15 @@ function App() {
     setImages([]);
   };
 
+  if (location.pathname === '/') {
+    return <LandingPage />;
+  }
+
   return (
     <div className="min-h-screen bg-candy-dark text-gray-200 font-sans selection:bg-candy-btn-start selection:text-white flex overflow-hidden">
 
       {/* Sidebar Navigation */}
-      <Sidebar activeTab={activeTab} />
+      <Sidebar />
 
       {/* Main Content Area */}
       <main className="flex-1 h-screen overflow-y-auto w-full relative">
@@ -86,7 +91,6 @@ function App() {
           </header>
 
           <Routes>
-            <Route path="/" element={<Navigate to="/upload" replace />} />
 
             <Route path="/upload" element={
               <div className="space-y-10 animate-fade-in">
