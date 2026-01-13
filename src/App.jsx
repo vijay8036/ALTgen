@@ -70,14 +70,33 @@ function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 h-screen overflow-y-auto w-full relative">
-        {/* Decorative background glow */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-candy-btn-end/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-candy-btn-start/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        {/* Animated Background Circles */}
+        <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+          {/* Floating gradient orb 1 */}
+          <div className="absolute top-[10%] right-[10%] w-[500px] h-[500px] bg-candy-btn-end/15 rounded-full blur-[120px] animate-float-slow"></div>
+
+          {/* Floating gradient orb 2 */}
+          <div className="absolute bottom-[10%] left-[5%] w-[400px] h-[400px] bg-candy-btn-start/10 rounded-full blur-[100px] animate-float-reverse"></div>
+
+          {/* Floating gradient orb 3 */}
+          <div className="absolute top-[50%] left-[30%] w-[450px] h-[450px] bg-purple-500/8 rounded-full blur-[110px] animate-float-diagonal"></div>
+
+          {/* Floating gradient orb 4 */}
+          <div className="absolute bottom-[30%] right-[20%] w-[350px] h-[350px] bg-cyan-500/10 rounded-full blur-[90px] animate-float-horizontal"></div>
+
+          {/* Floating gradient orb 5 */}
+          <div className="absolute top-[20%] left-[50%] w-[380px] h-[380px] bg-teal-500/8 rounded-full blur-[95px] animate-float-vertical"></div>
+        </div>
 
         <div className="max-w-5xl mx-auto p-4 md:p-12 relative z-10">
 
+          {/* Mobile Logo - Only visible on mobile */}
+          <div className="md:hidden flex items-center justify-center mb-8 pt-4">
+            <img src="/assets/logo.svg" alt="ALT Gen Logo" className="h-12" />
+          </div>
+
           <header className="mb-12 text-center md:text-left border-b border-white/5 pb-8">
-            <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-6xl font-heading font-semibold mb-6 tracking-tight leading-tight">
               <span className="text-candy-light block">{activeTab === 'upload' ? 'Generate ALT for' : 'Extract images from'}</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-candy-btn-start to-candy-btn-end">
                 {activeTab === 'upload' ? 'your uploads' : 'any website'}

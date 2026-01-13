@@ -10,15 +10,20 @@
 
 @layer components {
   .candy-card {
-    @apply bg-candy-bg/80 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:border-candy-btn-start/30 hover:shadow-candy-btn-start/10;
+    @apply backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-2xl transition-all duration-500 hover:border-candy-btn-start;
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  .candy-card:hover {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2), 0 0 40px rgba(34, 211, 238, 0.1);
   }
 
   .candy-btn {
-    @apply bg-gradient-to-r from-candy-btn-start to-candy-btn-end text-white font-bold py-3 px-6 rounded-lg hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform;
+    @apply bg-gradient-to-r from-candy-btn-start to-candy-btn-end text-white font-bold py-3 px-6 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300;
   }
 
   .candy-btn:hover {
-    box-shadow: 0 0 20px rgba(255, 109, 90, 0.4);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
   }
 
   .candy-input {
@@ -28,17 +33,17 @@
   @keyframes scan {
     0% {
       top: 0%;
-      box-shadow: 0 0 15px 2px rgba(255, 109, 90, 0.5);
+      box-shadow: 0 0 15px 2px rgba(34, 211, 238, 0.5);
     }
 
     50% {
       top: 100%;
-      box-shadow: 0 0 20px 4px rgba(144, 75, 206, 0.6);
+      box-shadow: 0 0 20px 4px rgba(16, 185, 129, 0.6);
     }
 
     100% {
       top: 0%;
-      box-shadow: 0 0 15px 2px rgba(255, 109, 90, 0.5);
+      box-shadow: 0 0 15px 2px rgba(34, 211, 238, 0.5);
     }
   }
 
@@ -48,48 +53,64 @@
 
   /* Floating animations for background orbs */
   @keyframes float-slow {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translate(0, 0) scale(1);
     }
+
     33% {
       transform: translate(30px, -30px) scale(1.05);
     }
+
     66% {
       transform: translate(-20px, 20px) scale(0.95);
     }
   }
 
   @keyframes float-reverse {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translate(0, 0) scale(1);
     }
+
     50% {
       transform: translate(-40px, -40px) scale(1.1);
     }
   }
 
   @keyframes float-diagonal {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translate(-50%, -50%) scale(1);
     }
+
     50% {
       transform: translate(calc(-50% + 50px), calc(-50% - 50px)) scale(1.05);
     }
   }
 
   @keyframes float-horizontal {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateX(0);
     }
+
     50% {
       transform: translateX(60px);
     }
   }
 
   @keyframes float-vertical {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateY(0);
     }
+
     50% {
       transform: translateY(-50px);
     }

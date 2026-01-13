@@ -8,18 +8,19 @@ export default {
     extend: {
       colors: {
         candy: {
-          dark: '#0F1021', // Deep Void (n8n specific dark)
-          bg: '#1A1D2D', // Panel Color
+          dark: '#000000', // Pure Black
+          bg: '#0a0a0a', // Very Dark Gray (almost black)
           green: '#ffffff', // Primary Text (White)
           white: '#ffffff',
-          'btn-start': '#FF6D5A', // Orange
-          'btn-end': '#904BCE', // Purple
-          'btn-hover': '#FF8F7D',
+          'btn-start': '#22D3EE', // Cyan-400
+          'btn-end': '#10B981', // Emerald-500
+          'btn-hover': '#06B6D4', // Cyan-500
           light: '#e0e0e0', // Soft Light Text
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Helvetica', 'Arial', 'sans-serif'],
+        heading: ['Montserrat', 'system-ui', 'sans-serif'],
         mono: ['Fira Code', 'monospace'],
       },
       animation: {

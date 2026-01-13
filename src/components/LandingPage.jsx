@@ -22,6 +22,15 @@ const LandingPage = () => {
 
                 {/* Additional moving orb 5 */}
                 <div className="absolute bottom-[30%] left-[10%] w-[350px] h-[350px] bg-blue-500/10 rounded-full blur-[90px] animate-float-vertical"></div>
+
+                {/* New floating orb 6 */}
+                <div className="absolute top-[60%] right-[5%] w-[450px] h-[450px] bg-cyan-500/8 rounded-full blur-[110px] animate-float-slow"></div>
+
+                {/* New floating orb 7 */}
+                <div className="absolute bottom-[10%] left-[40%] w-[380px] h-[380px] bg-orange-500/8 rounded-full blur-[95px] animate-float-reverse"></div>
+
+                {/* New floating orb 8 */}
+                <div className="absolute top-[10%] left-[30%] w-[420px] h-[420px] bg-indigo-500/8 rounded-full blur-[105px] animate-float-horizontal"></div>
             </div>
 
             {/* Navigation */}
@@ -40,9 +49,9 @@ const LandingPage = () => {
                     <span className="text-xs font-medium text-gray-300 uppercase tracking-wider">v2.0 Now Available with Website Scanning</span>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-8 leading-tight animate-fade-in-up">
+                <h1 className="text-5xl md:text-7xl font-heading font-semibold tracking-tight mb-8 leading-tight animate-fade-in-up">
                     <span className="block text-white">Make the Web</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-candy-btn-start via-purple-400 to-candy-btn-end">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400">
                         Accessible & Visible
                     </span>
                 </h1>

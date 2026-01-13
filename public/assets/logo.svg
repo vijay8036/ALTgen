@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="683" height="221.568" viewBox="0 0 683 221.568">
   <defs>
     <linearGradient id="linear-gradient" x1="0.589" y1="-0.209" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#ff6d5a"/>
-      <stop offset="1" stop-color="#904bce"/>
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#34d399"/>
     </linearGradient>
   </defs>
   <g id="Group_5" data-name="Group 5" transform="translate(-592 -268)">
