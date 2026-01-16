@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { MdCloudUpload, MdWeb, MdMenu, MdClose } from 'react-icons/md';
+import { MdCloudUpload, MdWeb, MdMenu, MdClose, MdExtension } from 'react-icons/md';
 
 const Sidebar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -70,6 +70,17 @@ const Sidebar = () => {
                     ))}
                 </nav>
 
+                {/* Download Plugin Link */}
+                <div className="px-4 pb-4">
+                    <NavLink
+                        to="/download"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="w-full flex items-center gap-3 px-6 py-4 rounded-xl transition-all duration-300 font-medium bg-gradient-to-r from-candy-btn-start/10 to-candy-btn-end/10 border border-candy-btn-start/20 text-white hover:from-candy-btn-start/20 hover:to-candy-btn-end/20 hover:border-candy-btn-start/40 group"
+                    >
+                        <MdExtension className="text-xl text-candy-btn-start group-hover:scale-110 transition-transform" />
+                        <span className="text-sm">Download Plugin</span>
+                    </NavLink>
+                </div>
 
                 <div className="p-6 border-t border-white/5 text-xs text-gray-500 font-mono">
                     v2.0 • Cyan Theme
