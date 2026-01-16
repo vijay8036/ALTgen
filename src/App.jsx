@@ -5,6 +5,7 @@ import ImageUploader from './components/ImageUploader';
 import AltResultCard from './components/AltResultCard';
 import WebsiteScanner from './components/WebsiteScanner';
 import LandingPage from './components/LandingPage';
+import DownloadPlugin from './components/DownloadPlugin';
 import { generateAltText } from './utils/gemini';
 
 function App() {
@@ -57,6 +58,10 @@ function App() {
   const handleClear = () => {
     setImages([]);
   };
+
+  if (location.pathname === '/download') {
+    return <DownloadPlugin />;
+  }
 
   if (location.pathname === '/') {
     return <LandingPage />;

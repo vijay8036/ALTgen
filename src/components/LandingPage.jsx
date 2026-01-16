@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MdRocketLaunch, MdAccessibility, MdBolt, MdAutoAwesome } from 'react-icons/md';
+import { MdRocketLaunch, MdAccessibility, MdBolt, MdAutoAwesome, MdExtension, MdDownload, MdCheckCircle } from 'react-icons/md';
 
 const LandingPage = () => {
     return (
@@ -75,6 +75,66 @@ const LandingPage = () => {
                         <span className="flex items-center gap-2"><MdAccessibility className="text-candy-btn-start" /> ADA Compliant</span>
                         <span className="flex items-center gap-2"><MdAutoAwesome className="text-yellow-400" /> AI Powered</span>
                         <span className="flex items-center gap-2"><MdBolt className="text-blue-400" /> Instant</span>
+                    </div>
+                </div>
+
+                {/* WordPress Plugin Section */}
+                <div className="mb-20 animate-fade-in-up delay-250">
+                    <div className="relative bg-gradient-to-br from-candy-bg/40 to-candy-bg/20 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/10 overflow-hidden">
+                        {/* Background decoration */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-candy-btn-end/10 rounded-full blur-[100px] -z-10"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-candy-btn-start/10 rounded-full blur-[100px] -z-10"></div>
+
+                        <div className="relative z-10">
+                            {/* Header */}
+                            <div className="text-center mb-10">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 mb-4 backdrop-blur-sm">
+                                    <MdExtension className="text-candy-btn-start" />
+                                    <span className="text-xs font-medium text-gray-300 uppercase tracking-wider">WordPress Integration</span>
+                                </div>
+
+                                <h2 className="text-3xl md:text-5xl font-heading font-semibold mb-4">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
+                                        Download WordPress Plugin
+                                    </span>
+                                </h2>
+
+                                <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                                    Integrate ALT text generation directly into your WordPress media library
+                                </p>
+                            </div>
+
+                            {/* Features Grid */}
+                            <div className="grid md:grid-cols-3 gap-6 mb-10">
+                                {[
+                                    { icon: <MdBolt />, title: "One-Click Install", desc: "Easy setup in minutes" },
+                                    { icon: <MdAutoAwesome />, title: "Bulk Processing", desc: "Generate for all images" },
+                                    { icon: <MdCheckCircle />, title: "Free Forever", desc: "No hidden costs" }
+                                ].map((feature, idx) => (
+                                    <div key={idx} className="flex flex-col items-center text-center p-6 rounded-xl bg-white/5 hover:bg-white/10 transition-all group">
+                                        <div className="text-4xl text-candy-btn-start mb-3 group-hover:scale-110 transition-transform">
+                                            {feature.icon}
+                                        </div>
+                                        <h3 className="font-bold text-white mb-2">{feature.title}</h3>
+                                        <p className="text-gray-400 text-sm">{feature.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* CTA Button */}
+                            <div className="text-center">
+                                <Link
+                                    to="/download"
+                                    className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-candy-btn-start to-candy-btn-end rounded-full font-bold text-lg shadow-lg shadow-candy-btn-start/25 hover:shadow-candy-btn-start/40 transition-all hover:-translate-y-1 group"
+                                >
+                                    <MdDownload className="text-2xl group-hover:animate-bounce" />
+                                    Download WordPress Plugin
+                                </Link>
+                                <p className="text-sm text-gray-500 mt-4">
+                                    Compatible with WordPress 5.0+ • Latest Version 2.0
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
